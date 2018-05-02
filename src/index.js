@@ -7,6 +7,9 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
+    for (let i = 0; i < array.length; i++) {
+        fn(array[i], i, array)
+    }
 }
 
 /*
@@ -16,6 +19,13 @@ function forEach(array, fn) {
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn) {
+    let newArray = [];
+
+    for (let i = 0; i < array.length; i++) {
+        newArray.push(fn(array[i], i, array));
+    }
+
+    return newArray;
 }
 
 /*
@@ -25,6 +35,14 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
+    let prevValue = initial ? initial : array[0];
+    let firstIndex = initial ? 0 : 1;
+
+    for (let i = firstIndex; i < array.length; i++) {
+        prevValue = fn(prevValue, array[i], i, array);
+    }
+
+    return prevValue;
 }
 
 /*
@@ -36,6 +54,7 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
+    return Object.keys(obj).map(item => item.toUpperCase());
 }
 
 /*
@@ -45,6 +64,18 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
+    if (!from && from !== 0) {
+        return array.map(item => item);
+    }
+
+    if (!to && to !== 0) {
+        to = array.length;
+    }
+
+    from = (from >= 0) ? from : array.length + from;
+    to = (to >= 0) ? to : array.length + to;
+
+    return array.filter((item, index) => index >= from && index < to);
 }
 
 /*
@@ -54,6 +85,13 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        set(target, prop, value) {
+            target[prop] = value*value;
+
+            return true;
+        }
+    });
 }
 
 export {
