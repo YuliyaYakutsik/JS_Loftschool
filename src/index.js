@@ -89,7 +89,7 @@ function createProxy(obj) {
         set(target, prop, value) {
             target[prop] = value*value;
 
-            return true;
+            return target[prop];
         }
     });
 }
