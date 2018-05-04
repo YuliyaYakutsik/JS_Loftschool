@@ -43,9 +43,7 @@ function sumWithDefaults(a, b = 100) {
    returnFnResult(() => 'привет') вернет 'привет'
  */
 function returnFnResult(fn) {
-    var result = fn();
-
-    return result;
+    return fn();
 }
 
 /*
@@ -61,12 +59,8 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter(number) {
-    return () => {
-        number++;
-
-        return number;
-    }
+function returnCounter(number=0) {
+    return () => ++number;
 }
 
 /*
