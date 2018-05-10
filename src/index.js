@@ -12,6 +12,7 @@
  */
 function createDivWithText(text) {
     let element = document.createElement('div');
+
     element.textContent = text;
 
     return element;
@@ -23,7 +24,8 @@ function createDivWithText(text) {
  Функция должна вставлять элемент, переданный в параметре what в начало элемента, переданного в параметре where
 
  Пример:
-   prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
+   prepend(document.querySelector('#one'), document.querySelector('#two')) 
+   // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
     let firstChild = where.firstChild;
@@ -36,7 +38,8 @@ function prepend(what, where) {
 
  3.1: Функция должна перебрать все дочерние элементы узла, переданного в параметре where
 
- 3.2: Функция должна вернуть массив, состоящий из тех дочерних элементов следующим соседом которых является элемент с тегом P
+ 3.2: Функция должна вернуть массив, состоящий из тех дочерних элементов,
+ следующим соседом которых является элемент с тегом P
 
  Пример:
    Представим, что есть разметка:
@@ -48,7 +51,8 @@ function prepend(what, where) {
       <p></p>
    </body>
 
-   findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
+   findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span,
+   т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
     let children = where.children;
@@ -66,7 +70,8 @@ function findAllPSiblings(where) {
 /*
  Задание 4:
 
- Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
+ Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла,
+ переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
  Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
 
  Необходимо найти и исправить ошибку в коде так, чтобы функция работала так, как описано выше.
@@ -115,7 +120,8 @@ function deleteTextNodes(where) {
 /*
  Задание 6:
 
- Выполнить предудыщее задание с использованием рекурсии - то есть необходимо заходить внутрь каждого дочернего элемента (углубляться в дерево)
+ Выполнить предудыщее задание с использованием рекурсии - то есть необходимо заходить
+ внутрь каждого дочернего элемента (углубляться в дерево)
 
  Задачу необходимо решить без использования рекурсии, то есть можно не уходить вглубь дерева.
  Так же будьте внимательны при удалении узлов, т.к. можно получить неожиданное поведение при переборе узлов
@@ -127,13 +133,12 @@ function deleteTextNodes(where) {
 function deleteTextNodesRecursive(where) {
     let elements = where.childNodes;
 
-    for (let element of elements) {
-        if (element.nodeType === 3) {
-            element.remove();
-        } else {
-            if (element.childNodes.length) {
-                deleteTextNodesRecursive(element);
-            }
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i].nodeType === 3) {
+            elements[i].remove();
+            --i;
+        } else if (elements[i].childNodes.length) {
+            deleteTextNodesRecursive(elements[i]);
         }
     }
 }
@@ -159,6 +164,46 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
+    const statistics = {
+        tags: {},
+        classes: {},
+        texts: 0
+    };
+
+    function statisticsCount(item) {
+        let elements = item.childNodes;
+
+        for (const element of elements) {
+            if (element.nodeType === 3) {
+                statistics.texts += 1;
+            } else if (element.nodeType === 1) {
+                let elementTag = element.tagName;
+                let elementClasses = element.classList;
+
+                if (statistics.tags[elementTag]) {
+                    statistics.tags[elementTag] += 1;
+                } else {
+                    statistics.tags[elementTag] = 1;
+                }
+
+                for (const eachClass of elementClasses) {
+                    if (statistics.classes[eachClass]) {
+                        statistics.classes[eachClass] += 1;
+                    } else {
+                        statistics.classes[eachClass] = 1;
+                    }  
+                }
+            }
+
+            if (element.childNodes.length) {
+                statisticsCount(element);
+            }
+        }
+    }
+
+    statisticsCount(root);
+
+    return statistics;
 }
 
 /*
@@ -194,6 +239,26 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+    // создаём экземпляр MutationObserver
+    let observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            let changesType = (mutation.addedNodes.length > 0) ? 'insert' : 'remove';
+            let changesArray = (mutation.addedNodes.length > 0) ? mutation.addedNodes : mutation.removedNodes;
+            let myArray = [];
+
+            for (const item of changesArray) {
+                myArray.push(item);
+            }
+
+            fn({ type: changesType, nodes: myArray });
+        });    
+    });
+
+    // конфигурация нашего observer
+    let config = { childList: true, subtree: true }; 
+
+    // передаём целевой элемент и его конфигурацию в качестве аргументов
+    observer.observe(where, config); 
 }
 
 export {
