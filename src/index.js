@@ -19,7 +19,9 @@
 function isAllTrue(array, fn) {
     if (array.length === 0 || !Array.isArray(array)) {
         throw new Error('empty array');
-    } else if (typeof(fn) !== 'function') {
+    }
+
+    if (typeof(fn) !== 'function') {
         throw new Error('fn is not a function');
     }
 
@@ -51,7 +53,9 @@ function isAllTrue(array, fn) {
 function isSomeTrue(array, fn) {
     if (array.length === 0 || !Array.isArray(array)) {
         throw new Error('empty array');
-    } else if (typeof(fn) !== 'function') {
+    }
+
+    if (typeof(fn) !== 'function') {
         throw new Error('fn is not a function');
     }
 
@@ -113,14 +117,10 @@ function calculator(number=0) {
 
     return {
         sum(...rest) {
-            return rest.reduce((previousValue, currentItem) => {
-                return previousValue + currentItem;
-            }, number);
+            return rest.reduce((previousValue, currentItem) => previousValue + currentItem, number);
         },
         dif(...rest) {
-            return rest.reduce((previousValue, currentItem) => {
-                return previousValue - currentItem;
-            }, number);
+            return rest.reduce((previousValue, currentItem) => previousValue - currentItem, number);
         },
         div(...rest) {
             return rest.reduce((previousValue, currentItem) => {
@@ -132,9 +132,7 @@ function calculator(number=0) {
             }, number);
         },
         mul(...rest) {
-            return rest.reduce((previousValue, currentItem) => {
-                return previousValue*currentItem;
-            }, number);
+            return rest.reduce((previousValue, currentItem) => previousValue*currentItem, number);
         }
     }
 }
