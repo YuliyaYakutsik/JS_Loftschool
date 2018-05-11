@@ -28,9 +28,7 @@ function createDivWithText(text) {
    // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
-    let firstChild = where.firstChild;
-
-    where.insertBefore(what, firstChild);
+    where.insertBefore(what, where.firstChild);
 }
 
 /*
@@ -58,9 +56,9 @@ function findAllPSiblings(where) {
     let children = where.children;
     let result = [];
 
-    for (let element of children) {
-        if (element.nextElementSibling && element.nextElementSibling.tagName.toLowerCase() === 'p') {
-            result.push(element);
+    for (let i = 0; i < children.length-1; i++) {
+        if (children[i].nextElementSibling.tagName.toLowerCase() === 'p') {
+            result.push(children[i]);
         }
     }
 
@@ -86,9 +84,9 @@ function findAllPSiblings(where) {
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
 function findError(where) {
-    var result = [];
+    let result = [];
 
-    for (var child of where.children) {
+    for (let child of where.children) {
         result.push(child.innerText);
     }
 
