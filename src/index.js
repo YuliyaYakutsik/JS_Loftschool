@@ -132,11 +132,14 @@ function deleteTextNodesRecursive(where) {
     let elements = where.childNodes;
 
     for (let i = 0; i < elements.length; i++) {
-        if (elements[i].nodeType === 3) {
-            elements[i].remove();
-            --i;
-        } else if (elements[i].childNodes.length) {
-            deleteTextNodesRecursive(elements[i]);
+        switch (elements[i].nodeType) {
+            case 3:
+                elements[i].remove();
+                --i;
+                break;
+            case 1:
+                deleteTextNodesRecursive(elements[i]);
+                break;
         }
     }
 }
