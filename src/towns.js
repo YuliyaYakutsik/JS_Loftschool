@@ -38,10 +38,15 @@ const homeworkContainer = document.querySelector('#homework-container');
  */
 function loadTowns() {
     const xhr = new XMLHttpRequest();
-    const url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+    let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
     let loadingBlock = homeworkContainer.querySelector('#loading-block');
+    const repeatButton = homeworkContainer.querySelector('.repeat-button');
     
     loadingBlock.textContent = 'Загрузка...';
+
+    if (repeatButton) {
+        repeatButton.remove();
+    }
 
     return new Promise((resolve, reject) => {
         xhr.open('GET', url, true);
@@ -68,13 +73,6 @@ function loadTowns() {
     })
 }
 
-loadTowns()
-    .then(() => {
-        loadingBlock.style.display = 'none';
-        filterBlock.style.display = 'block';
-    })
-    .catch(() => false)
-
 /*
  Функция должна проверять встречается ли подстрока chunk в строке full
  Проверка должна происходить без учета регистра символов
@@ -98,6 +96,32 @@ const filterBlock = homeworkContainer.querySelector('#filter-block');
 const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
+
+let towns = [];
+
+function checkLoadingTowns() {
+    loadTowns()
+        .then((towns) => {
+            loadingBlock.style.display = 'none';
+            filterBlock.style.display = 'block';
+
+            towns = towns;
+        }, () => {
+            let button = document.createElement('button');
+            
+            loadingBlock.innerText = 'Не удалось загрузить города';
+            button.innerText = 'Повторить';
+            button.classList = 'repeat-button';
+
+            button.addEventListener('click', () => {
+                towns = checkLoadingTowns();
+            });
+
+            homeworkContainer.insertBefore(button, filterBlock);
+        })
+}
+
+checkLoadingTowns();
 
 filterInput.addEventListener('keyup', function() {
     let searchValue = filterInput.value;
