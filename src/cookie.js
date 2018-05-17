@@ -45,56 +45,68 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 let cookies = {};
 
+function addCookieToTheTable(cookie, cookies) {
+    let fragment = document.createDocumentFragment();
+    let newCookie = document.createElement('tr');
+
+    newCookie.innerHTML = `<td class='cookieName'>${cookie}</td><td class='cookieValue'>${cookies[cookie]}</td><td><button class='deleteButton'>Удалить</button></td>`;
+
+    fragment.appendChild(newCookie);
+    listTable.appendChild(fragment);
+}
+
 if (document.cookie !== '') {
     cookies = document.cookie.split('; ').reduce((prev, current) => {
         let [name, value] = current.split('=');
+
         prev[name] = value;
+
         return prev;
     }, cookies);
 
     for (let cookie in cookies) {
-        let newCookie = document.createElement('tr');
-
-        newCookie.innerHTML = `<td class='cookieName'>${cookie}</td><td class='cookieValue'>${cookies[cookie]}</td><td><a href='#' class='deleteButton'>Удалить</a></td>`;
-
-        listTable.appendChild(newCookie);
+        addCookieToTheTable(cookie, cookies);
     }
 }
 
 filterNameInput.addEventListener('keyup', function() {
-    // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    let filterNameInputValue = filterNameInput.value;
+
+    listTable.innerHTML = '';
+
+    for (let cookie in cookies) {
+        if (cookies[cookie].toLowerCase().indexOf(filterNameInputValue.toLowerCase()) !== -1) {
+            addCookieToTheTable(cookie, cookies);
+        }
+    }
 });
 
 addButton.addEventListener('click', () => {
     let addNameInputValue = addNameInput.value;
     let addValueInputValue = addValueInput.value;
+    let filterNameInputValue = filterNameInput.value;
 
     if (!addNameInputValue || !addValueInputValue) {
         return false;
-    }
-
-    if (!cookies[addNameInputValue]) {
-        let newCookie = document.createElement('tr');
-        newCookie.innerHTML = `<td class='cookieName'>${addNameInputValue}</td><td class='cookieValue'>${addValueInputValue}</td><td><a href='#' class='deleteButton'>Удалить</a></td>`;
-
-        listTable.appendChild(newCookie);
-    } else {
-        let cookieNameNodes = document.querySelectorAll('.cookieName');
-
-        for (let cookieNameNode of cookieNameNodes) {
-            if (cookieNameNode.textContent === addNameInputValue) {
-                cookieNameNode.nextElementSibling.textContent = addValueInputValue;
-            }
-        }
     }
 
     document.cookie = `${addNameInputValue}=${addValueInputValue}`;
 
     cookies = document.cookie.split('; ').reduce((prev, current) => {
         let [name, value] = current.split('=');
+
         prev[name] = value;
+
         return prev;
     }, cookies);
+
+    listTable.innerHTML = '';
+
+    for (let cookie in cookies) {
+        if (cookies[cookie].toLowerCase().indexOf(filterNameInputValue.toLowerCase()) !== -1) {
+            addCookieToTheTable(cookie, cookies);
+        }
+    }
 
     addNameInput.value = '';
     addValueInput.value = '';
@@ -106,8 +118,6 @@ document.body.addEventListener('click', (e) => {
     if (target.classList.contains('deleteButton')) {
         let cookieName;
 
-        e.preventDefault();
-
         while (target.parentNode.tagName !== 'TR') {
             target = target.parentNode;
         }
@@ -117,5 +127,6 @@ document.body.addEventListener('click', (e) => {
         target.parentNode.remove();
 
         document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        delete cookies[cookieName];
     }
 });
