@@ -85,7 +85,7 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
-    return full.toLowerCase().indexOf(chunk.toLowerCase()) >= 0 && chunk;
+    return full.toLowerCase().indexOf(chunk.toLowerCase()) >= 0;
 }
 
 /* Блок с надписью "Загрузка" */
@@ -131,7 +131,7 @@ filterInput.addEventListener('keyup', function() {
 
     loadTowns().then(towns => {
         for (let town of towns) {
-            if (isMatching(town.name, searchValue)) {
+            if (isMatching(town.name, searchValue) && searchValue) {
                 let div = document.createElement('div');
 
                 div.textContent = town.name;
