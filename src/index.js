@@ -275,14 +275,12 @@ function getElement(target) {
  * @param {*} sourceElement - элемент-друг, который переносится
  */
 function refreshFriendsLists(sourceList, resultList, sourceElement) {
-	let elementItem = sourceElement.querySelector('.friend__name').textContent;
-	let elementItemPhoto = sourceElement.querySelector('.friend__picture').src;
+	let elementId = sourceElement.id;
 
 	sourceList.items = sourceList.items.filter(function(item) {
-		let fullItem = `${item.first_name} ${item.last_name}`;
-		let fullItemPhoto = `${item.photo_50}`;
+		let fullId = `${item.id}`;
 
-		if (isMatching(elementItem, fullItem) && elementItemPhoto === fullItemPhoto) {
+		if (elementId === fullId) {
 			resultList.items.push(item);
 		} else {
 			return true;
