@@ -29,10 +29,10 @@ module.exports = {
                 warnings: false
             }
         }),
-        new ExtractTextPlugin('styles.css'),
+        new ExtractTextPlugin('css/index.css'),
         new HtmlPlugin({
-            title: 'Loft School sample project',
-            template: 'index.hbs'
+            title: 'Drugofilter project',
+            template: 'index.html'
         }),
         new CleanWebpackPlugin(['dist'])
     ]

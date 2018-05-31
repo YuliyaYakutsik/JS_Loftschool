@@ -1,0 +1,86 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+        <title>Drugofilter</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.js"></script>
+        <script src="http://vk.com/js/api/openapi.js" type="text/javascript"></script>
+    </head> 
+    <body> 
+        <div class="drugofilter"> 
+            <div class="drugofilter__wrapper"> 
+                <div class="drugofilter__logo"> 
+                    <img class="drugofilter__logo__image" src="./src/images/title.png" alt="title"> 
+                </div> 
+                <div class="drugofilter__authorization"> 
+                    <a class="drugofilter__authorization__link" href="#">Авторизоваться через VK</a>
+                    <span>Подождите, пожалуйста. Идет обработка данных...</span>
+                </div> 
+                <div class="drugofilter__content drugofilter__content_hidden"> 
+                    <div class="drugofilter__header"> 
+                        <div class="drugofilter__title"> 
+                            Выберите друзей 
+                        </div> 
+                        <a href='#' class="drugofilter__header__close-button"> 
+                            <img class="drugofilter__header__close-button__image" src="./src/images/close.png" alt="close">
+                        </a> 
+                    </div> 
+                    <div class="drugofilter__forms">
+                        <div class="drugofilter__search">
+                            <form class="drugofilter__search__form drugofilter__search__form_all-friends">
+                                <input class="search search-all-friends" type="text" placeholder="Начните вводить имя друга">
+                            </form>
+                        </div>
+                        <div class="drugofilter__search">
+                            <form class="drugofilter__search__form">
+                                <input class="search search-group-friends" type="text" placeholder="Название">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="drugofilter__info">
+                        <div class="drugofilter__info__column">
+                            <div class="drugofilter__info__title">
+                                Ваши друзья
+                            </div>
+                            <ul class="drugofilter__info__list drugofilter__info__list__all-friends">
+                                <!--Here will be all my friends-->
+                                Идет загрузка моих друзей. Пожалуйста, подождите!
+                            </ul>
+                        </div>
+                        <div class="drugofilter__info__column">
+                            <div class="drugofilter__info__title">
+                                Друзья в списке
+                            </div>
+                            <ul class="drugofilter__info__list drugofilter__info__list__group-friends">
+                                <!--Here will be all chosen friends-->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drugofilter__footer">
+                        <a href="#" class="drugofilter__footer__link">
+                            Сохранить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="drugofilter__bg"></div>
+        <script id="user-template" type="text/x-handlebars-template">
+            {{#each items}}
+            <li class="drugofilter__info__item friend" draggable="true">
+                <div class="friend__preview">
+                    <img src="{{photo_50}}" alt="avatar" class="friend__picture" draggable="false">
+                </div>
+                <div class="friend__name">
+                    {{first_name}} {{last_name}}
+                </div>
+                <a href="#" class="friend__link" draggable="false">
+                    <img class="friend__link__image" src="./src/images/add.png" alt="plus" draggable="false">
+                </a>
+            </li>
+            {{/each}}
+        </script>
+    </body>
+</html>

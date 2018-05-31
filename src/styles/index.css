@@ -1,0 +1,265 @@
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    color: red;
+}
+
+body {
+    margin: 0;
+}
+
+.drugofilter {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drugofilter__wrapper {
+    flex: 0 0 auto;
+}
+
+.drugofilter__logo {
+    width: 102px;
+    height: 24px;
+    margin: 0 auto 21px;
+}
+
+.drugofilter__authorization {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #ffffff;
+}
+
+.drugofilter__authorization span{
+    display: none;
+}
+
+.drugofilter__authorization_hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.drugofilter__authorization__link {
+    color: #ffffff;
+}
+
+.drugofilter__authorization__link:hover {
+    text-decoration: underline;
+}
+
+.drugofilter__content {
+    width: 620px;
+    background: #f0f0f0;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.drugofilter__content.drugofilter__content_hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.drugofilter__header {
+    padding: 15px;
+    background-color: #ff8663;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drugofilter__title {
+    font-size: 16px;
+    font-family: "Fira Sans", Times, serif;
+    font-weight: 800;
+    color: rgb(255, 255, 255);
+}
+
+.drugofilter__header__close-button {
+    display: block;
+    width: 14px;
+    height: 14px;
+    transition: .3s;
+}
+
+.drugofilter__header__close-button:hover {
+    opacity: .8;
+}
+
+.drugofilter__forms {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.drugofilter__search {
+    padding: 0 15px;
+    width: 50%;
+    flex: 1 0 auto;
+}
+
+.drugofilter__search__form {
+    position: relative;
+}
+
+.drugofilter__search__form.drugofilter__search__form_all-friends::before {
+    content: '';
+    display: block;
+    background-repeat: no-repeat;
+    background-image: url('../images/search.png');
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 7px;
+    left: 8px;
+}
+
+.search {
+    width: 100%;
+    border-radius: 25px;
+    padding: 7px 15px;
+    outline: none;
+    border: 1px solid #ffffff;
+    color: #9f9f9f;
+}
+
+.search.search-all-friends {
+    padding-left: 25px;
+}
+
+.search:focus,
+.search:active {
+    border-color: #ff8663;
+}
+
+.drugofilter__titles {
+    padding: 
+}
+
+.drugofilter__info {
+    display: flex;
+}
+
+.drugofilter__info__column {
+    width: 50%;
+    background-color: #ffffff;
+}
+
+.drugofilter__info__column+.drugofilter__info__column {
+    border-left: 1px solid rgb(240, 240, 240);
+}
+
+.drugofilter__info__title {
+    padding: 15px 15px 0;
+    font-size: 12px;
+    font-family: "Fira Sans";
+    font-weight: 700;
+    color: rgb(79, 79, 79);
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.drugofilter__info__list {
+    height: 327px;
+    overflow-y: auto;
+    margin: 0 0 0 15px;
+    padding: 0;
+}
+
+.drugofilter__info__list.drugofilter__info__list__group-friends .friend__link {
+    transform: rotate(45deg);
+}
+
+.drugofilter__info__item {
+    list-style-type: none;
+    padding: 0;
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.friend {
+    display: flex;
+    align-items: center;
+    padding: 10px 8px;
+    position: relative;
+}
+
+.friend__preview {
+    display: block;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.friend__picture {
+    margin-bottom: 0;
+    max-width: 100%;
+}
+
+.friend__name {
+    margin-left: 8px;
+    color: rgb(79, 79, 79);
+}
+
+.friend__link {
+    margin-left: auto;
+    transition: .3s;
+}
+
+.friend__link:hover {
+    opacity: .8;
+}
+
+.DrugoFIlter__Footer {
+    height: 45px;
+}
+
+.drugofilter__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+}
+
+.drugofilter__footer__link {
+    background-color: #ff8663;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.selected {
+    background-color: #f0f0f0;
+}
+
+.drugofilter__bg {
+    position: absolute;
+    background: #999999;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;    
+}
