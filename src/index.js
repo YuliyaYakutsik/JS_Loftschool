@@ -1,4 +1,4 @@
-import css from './styles/index.css'
+import css from './styles/index.css';
 
 const template = document.querySelector('#user-template').textContent;
 const render = Handlebars.compile(template);
