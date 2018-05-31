@@ -46,7 +46,7 @@ drugofilterAuthorizationLink.addEventListener('click', e => {
 	drugofilterAuthorization.querySelector('span').style.display = 'inline';
 
 	VK.init({
-	    apiId: 6490516
+	    apiId: 6496045
 	});
 
 	auth()
