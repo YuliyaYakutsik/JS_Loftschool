@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>GeoOtzyv project</title>
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <div class="geoOtzyv">
+            <div id="map" class="map"></div>
+            <div class="infoWindow">
+                <div class="infoWindow__header">
+                    <div class="infoWindow__title">
+                        <img src="./src/images/marker_small.png" alt="marker" class="infoWindow__title__picture">
+                        <div class="infoWindow__title__address">
+                            Невский пр., 78, Санкт-Петербург, 191025
+                        </div>
+                    </div>
+                    <div class="infoWindow__close">
+                        <a href="#" class="infoWindow__close__link">
+                            <img src="./src/images/close.png" alt="close" class="infoWindow__close__picture">
+                        </a>
+                    </div>
+                </div>
+                <div class="infoWindow__content">
+                    <div class="reviews">
+                        <ul class="reviews__list">
+                            <li class="reviews__item">
+                                <div class="reviews__item__title">
+                                    <p class="reviews__item__name">Svetlana</p>
+                                    <p class="reviews__item__place">Шоколадница</p>
+                                    <p class="reviews__item__date">13.12.2015</p>
+                                </div>
+                                <div class="reviews__item__text">
+                                    Очень хорошее место!
+                                </div>
+                            </li>
+                            <li class="reviews__item">
+                                <div class="reviews__item__title">
+                                    <p class="reviews__item__name">Сергей Мелюков</p>
+                                    <p class="reviews__item__place">Красный куб</p>
+                                    <p class="reviews__item__date">12.12.2015</p>
+                                </div>
+                                <div class="reviews__item__text">
+                                    Ужасное место! Кругом зомби!!!
+                                </div>
+                            </li>
+                            <li class="reviews__item">
+                                <div class="reviews__item__title">
+                                    <p class="reviews__item__name">Сергей Мелюков</p>
+                                    <p class="reviews__item__place">Красный куб</p>
+                                    <p class="reviews__item__date">12.12.2015</p>
+                                </div>
+                                <div class="reviews__item__text">
+                                    Ужасное место! Кругом зомби!!!
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <form class="reviewsForm" name="reviewsForm">
+                        <div class="reviewsForm__title">
+                            Ваш отзыв
+                        </div>
+                        <input type="text" class="reviewsForm__element reviewsForm__name" name="name" placeholder="Ваше имя">
+                        <input type="text" class="reviewsForm__element reviewsForm__place" name="place" placeholder="Укажите место">
+                        <textarea class="reviewsForm__element reviewsForm__review" name="review" placeholder="Поделитесь впечатлениями"></textarea>
+                    </form>
+                </div>
+                <div class="infoWindow__footer">
+                    <a href="#" class="infoWindow__footer__link">
+                        Добавить
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            ymaps.ready(init);
+            var myMap;
+            function init(){     
+                myMap = new ymaps.Map("map", {
+                    center: [55.760458, 37.663541],
+                    zoom: 18
+                });
+                var myPlacemark = new ymaps.Placemark([55.760458, 37.663541], {}, {
+                    iconLayout: 'default#image',
+                    iconImageHref: 'image/marker_grey.png'
+                });
+                myMap.geoObjects.add(myPlacemark);
+                myPlacemark.events.add('click', function (e) {
+                    var placemark = e.get('target'); // метка по которой кликнули
+                    placemark.options.set({
+                        iconImageHref: 'image/marker_orange.png'
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>
