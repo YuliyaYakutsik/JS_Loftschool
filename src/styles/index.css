@@ -37,12 +37,14 @@ a:active {
     position: relative;
 }
 
+.map {
+    overflow: hidden;
+}
+
 .infoWindow {
     position: absolute;
     background-color: #ffffff;
     width: 380px;
-    top: 15%;
-    left: 25%;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -55,7 +57,7 @@ a:active {
 
 .infoWindow__title {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .infoWindow__title__picture {
