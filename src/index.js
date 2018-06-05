@@ -1,4 +1,5 @@
 import css from './styles/index.css';
+import {myClick} from './myClick.js';
 
 const template = document.querySelector('#user-template').textContent;
 const render = Handlebars.compile(template);
@@ -20,6 +21,9 @@ const closeButton = document.querySelector('.drugofilter__header__close-button')
 let allFriends = {items: []};
 let groupFriends = {items: []};
 let currentDrag;
+let element = 'hello';
+
+myClick();
 
 if (localStorage.allFriends) {
 	let localAllFriends = JSON.parse(localStorage.allFriends);
