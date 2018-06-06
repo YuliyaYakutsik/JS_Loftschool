@@ -1,14 +1,17 @@
 import css from './styles/index.css';
-import {reviewTemplate, reviewFormTemplate} from './templates.js';
-import click from './containerClicks.js';
 import myObj from './data.js';
 
-let myMap = null;
-let infoWindowIsOpened = null;
-let myClusterer = null;
-let added = 'hello';
-let activeSinglMark = null;
+let myMap;
+let myClusterer;
+let activeInfoWindow;
+let activeMarker;
 let container = document.querySelector('.geoOtzyv');
+
+const reviewTemplate = document.querySelector('#review-template').textContent;
+const renderReviewTemplate = Handlebars.compile(reviewTemplate);
+
+const formTemplate = document.querySelector('#markerInfo-template').textContent;
+const renderFormTemplate = Handlebars.compile(formTemplate);
 
 /**
  * Карта загружена
@@ -16,7 +19,6 @@ let container = document.querySelector('.geoOtzyv');
 ymaps.ready(() => {
     container.addEventListener('click', clickOnContainer);
     initMap();
-    click.myClick();
 });
 
 /**
@@ -24,8 +26,8 @@ ymaps.ready(() => {
  */
 function initMap() {
     myMap = new ymaps.Map("map", {
-        center: [55.760458, 37.663541],
-        zoom: 18
+        center: [53.902496, 27.561481],
+        zoom: 17
     });
 
     const customItemContentLayout = ymaps.templateLayoutFactory.createClass(
@@ -38,6 +40,7 @@ function initMap() {
 
     myClusterer = new ymaps.Clusterer({
         clusterDisableClickZoom: true,
+        preset: 'islands#invertedDarkOrangeClusterIcons',
         clusterOpenBalloonOnClick: true,
         clusterHideIconOnBalloonOpen: false,
         // Устанавливаем стандартный макет балуна кластера "Карусель".
@@ -60,11 +63,15 @@ function initMap() {
         // Можно отключить отображение меню навигации.
         // clusterBalloonPagerVisible: false
     });
+
+    //Добавляем кластер на нашу карту
     myMap.geoObjects.add(myClusterer);
 
+    //Добавляем обработку кликов по карте
     myMap.events.add('click', clickOnMap);
 
-    myClusterer.balloon.events.add('open', closeForm);
+    //Закрываем форму отзывов, если открываем балун
+    myClusterer.balloon.events.add('open', closeMarkerInfo);
 }
 
 /**
@@ -77,8 +84,8 @@ function clickOnMap(e) {
     const clientY = e.get('domEvent').get('clientY');
 
     myClusterer.balloon.close(myClusterer.getClusters()[0]);
-    closeForm();
-    openInfo({coords, clientX, clientY}).catch(errorHandler);
+    closeMarkerInfo();
+    openMarkerInfo({coords, clientX, clientY}).catch(errorHandler);
 }
 
 /**
@@ -86,21 +93,18 @@ function clickOnMap(e) {
  */
 function geocodeAddress(coords) {
     return ymaps.geocode(coords).then(result => {
-        const address = result.geoObjects.get(0).getAddressLine();
-        
-        return address;
+        return result.geoObjects.get(0).getAddressLine();
     });
 }
 
 /**
  * Открывыет форму отзыва для отдельного объекта
  */
-function openInfo({coords, clientX, clientY}) {
+function openMarkerInfo({coords, clientX, clientY}) {
 
     return geocodeAddress(coords).then(result => {
         const address = result;
-        const render = Handlebars.compile(reviewFormTemplate);
-        const html = render({address: address});
+        const html = renderFormTemplate({address: address});
         const container = document.querySelector('.geoOtzyv');
         const infoWindow = document.createElement('div');
         const left = (clientX + 380 > window.innerWidth ? clientX - 380 : clientX);
@@ -114,7 +118,7 @@ function openInfo({coords, clientX, clientY}) {
         infoWindow.style.top = `${top}px`;
 
         container.appendChild(infoWindow);
-        infoWindowIsOpened = infoWindow;
+        activeInfoWindow = infoWindow;
 
         return address;
     });
@@ -128,7 +132,7 @@ function clickOnContainer(e) {
 
     if (getElement(e.target, 'infoWindow__close__link')) {
         e.preventDefault();
-        closeForm();
+        closeMarkerInfo();
     }
 
     if (getElement(e.target, 'infoWindow__footer__link')) {
@@ -137,12 +141,12 @@ function clickOnContainer(e) {
     }
     
     if (getElement(e.target, 'balloon__address__link')) {
-        e.preventDefault();
         const coords = JSON.parse(e.target.dataset.key);
         const clientX = e.clientX;
         const clientY = e.clientY;
 
-        openInfo({coords, clientX, clientY}).then(address => {
+        e.preventDefault();
+        openMarkerInfo({coords, clientX, clientY}).then(address => {
             const data = myObj.getDataByKey(address);
 
             data.forEach(item => {
@@ -172,15 +176,15 @@ function getElement(target, searchClass) {
 /**
  * Закрывает форму
  */
-function closeForm() {
-    if (infoWindowIsOpened) {
-        infoWindowIsOpened.remove();
-        infoWindowIsOpened = null;
-        if (activeSinglMark) {
-            activeSinglMark.options.set({
+function closeMarkerInfo() {
+    if (activeInfoWindow) {
+        activeInfoWindow.remove();
+        activeInfoWindow = null;
+        if (activeMarker) {
+            activeMarker.options.set({
                 iconImageHref: 'src/images/marker_grey.png'
             });
-            activeSinglMark = null;
+            activeMarker = null;
         }
     }
 }
@@ -197,8 +201,8 @@ function addNewMarker() {
     if (name.length === 0 || place.length === 0 || review.length === 0) {
         alert('Заполните все поля');
     } else {
-        const key = JSON.parse(infoWindowIsOpened.dataset.coords);
-        const address = infoWindowIsOpened.dataset.address;
+        const key = JSON.parse(activeInfoWindow.dataset.coords);
+        const address = activeInfoWindow.dataset.address;
         const date = formatDate(new Date());
         const data = {name: name, place: place, review: review, date: date};
         const myPlacemark = new ymaps.Placemark(key, {
@@ -211,22 +215,18 @@ function addNewMarker() {
             iconImageHref: 'src/images/marker_orange.png'
         });
         
-        // Добавляем координаты расположения маркера в ключ markerCoords
-        myPlacemark.markerCoords = key; 
-        
         myPlacemark.events.add('click', clickOnMarker);
 
         myClusterer.add(myPlacemark);
 
         // Делаем метку активной после добавления на карте
-        activeSinglMark = myPlacemark;
+        activeMarker = myPlacemark;
 
-        if (myObj.hasKey(address)) {
-            myObj.appendDataToKey(address, data);
-        } else {
+        if (!myObj.hasKey(address)) {
             myObj.createKey(address);
-            myObj.appendDataToKey(address, data);
         }
+            
+        myObj.appendDataToKey(address, data);
 
         form.name.value = '';
         form.place.value = '';
@@ -238,20 +238,18 @@ function addNewMarker() {
 
 /**
  * Выводит дату в формате dd.mm.yyyy
- * @param {*} data 
+ * @param {*} date 
  */
 function formatDate(date) {
+    let dd = date.getDate();
+    let mm = date.getMonth() + 1;
+    let yy = date.getFullYear() % 100;
 
-  var dd = date.getDate();
-  if (dd < 10) dd = '0' + dd;
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    if (yy < 10) yy = '0' + yy;
 
-  var mm = date.getMonth() + 1;
-  if (mm < 10) mm = '0' + mm;
-
-  var yy = date.getFullYear() % 100;
-  if (yy < 10) yy = '0' + yy;
-
-  return dd + '.' + mm + '.' + yy;
+    return dd + '.' + mm + '.' + yy;
 }
 
 /**
@@ -260,19 +258,17 @@ function formatDate(date) {
  */
 function addComment(data) {
     const reviewsList = container.querySelector('.reviews__list');
-    const render = Handlebars.compile(reviewTemplate);
     const reviewsItem = document.createElement('li');
-    const html = render(data);
+    const html = renderReviewTemplate(data);
     
     reviewsItem.className = 'reviews__item';
     reviewsItem.innerHTML = html;
     
     if (reviewsList.children.length === 0) {
         reviewsList.innerHTML = '';
-        reviewsList.appendChild(reviewsItem);
-    } else {
-        reviewsList.appendChild(reviewsItem);
     }
+        
+    reviewsList.appendChild(reviewsItem);
 }
 
 /**
@@ -280,22 +276,21 @@ function addComment(data) {
  * @param {*} e 
  */
 function clickOnMarker(e) {
-    e.preventDefault();
-    closeForm();
-    myClusterer.balloon.close(myClusterer.getClusters()[0]);
     const placemark = e.get('target');
+    const coords = placemark.geometry.getCoordinates();
+    const clientX = e.get('domEvent').get('clientX');
+    const clientY = e.get('domEvent').get('clientY');
 
-    activeSinglMark = placemark;
-
+    e.preventDefault();
+    closeMarkerInfo();
+    myClusterer.balloon.close(myClusterer.getClusters()[0]);
     placemark.options.set({
         iconImageHref: 'src/images/marker_orange.png'
     });
 
-    const coords = placemark.markerCoords;
-    const clientX = e.get('domEvent').get('clientX');
-    const clientY = e.get('domEvent').get('clientY');
+    activeMarker = placemark;
 
-    openInfo({coords, clientX, clientY}).then((address) => {
+    openMarkerInfo({coords, clientX, clientY}).then((address) => {
         const data = myObj.getDataByKey(address);
 
         data.forEach(item => {

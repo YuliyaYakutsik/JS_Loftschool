@@ -111,6 +111,11 @@ a:active {
 
 .reviews__item__place {
     margin-right: 10px;
+    color: grey;
+}
+
+.reviews__item__date {
+    color: grey;
 }
 
 .reviewsForm {
@@ -167,4 +172,27 @@ a:active {
     color: rgb(255, 255, 255);
     transition: .3s;
     text-align: center;
+}
+
+.balloon__place {
+    margin: 0 0 15px;
+}
+
+.balloon__address,
+.balloon__review {
+    margin-bottom: 10px;
+}
+
+.balloon__address__link {
+    color: orange;
+}
+
+.balloon__address__link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.balloon__date {
+    text-align: right;
+    color: grey;
 }
