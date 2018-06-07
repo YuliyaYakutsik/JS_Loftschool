@@ -26,8 +26,8 @@ ymaps.ready(() => {
  */
 function initMap() {
     myMap = new ymaps.Map("map", {
-        center: [53.902496, 27.561481],
-        zoom: 17
+        center: [55.760458, 37.663541],
+        zoom: 18
     });
 
     const customItemContentLayout = ymaps.templateLayoutFactory.createClass(
@@ -72,6 +72,7 @@ function initMap() {
 
     //Закрываем форму отзывов, если открываем балун
     myClusterer.balloon.events.add('open', closeMarkerInfo);
+    delete localStorage.reviews;
 
     //Если есть отзывы в LocalStorage, добавляем их на карту
     addMarkers();
@@ -91,7 +92,7 @@ function addMarkers() {
 
             for (let item of reviews[key]) {
                 myObj.appendDataToKey(key, item);
-                
+
                 geocodeCoords(key).then(result => {
                     let coords = result;
 
