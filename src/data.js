@@ -16,6 +16,10 @@ export default (function(){
 
         getDataByKey(key) {
             return obj[key];
+        },
+
+        getObject() {
+            return obj;
         }
     }
 })();
