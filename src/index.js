@@ -1,4 +1,4 @@
-import css from './styles/index.css';
+import './styles/index.css';
 import myObj from './data.js';
 
 let myMap;
