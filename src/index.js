@@ -72,7 +72,6 @@ function initMap() {
 
     //Закрываем форму отзывов, если открываем балун
     myClusterer.balloon.events.add('open', closeMarkerInfo);
-    delete localStorage.reviews;
 
     //Если есть отзывы в LocalStorage, добавляем их на карту
     addMarkers();
