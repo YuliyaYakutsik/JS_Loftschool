@@ -1,6 +1,6 @@
-import {getClusterer} from './initMap.js';
-import {openInfoWindow, closeInfoWindow} from './infoWindow.js';
-import {errorHandler} from './errorHandler.js';
+import { getClusterer } from './initMap.js';
+import { openInfoWindow, closeInfoWindow } from './infoWindow.js';
+import { errorHandler } from './errorHandler.js';
 
 /**
  * Обработывает клик по карте
@@ -13,7 +13,7 @@ function clickOnMap(e) {
 
     getClusterer().balloon.close(getClusterer().getClusters()[0]);
     closeInfoWindow();
-    openInfoWindow({coords, clientX, clientY}).catch(errorHandler);
+    openInfoWindow({ coords, clientX, clientY }).catch(errorHandler);
 }
 
 export {

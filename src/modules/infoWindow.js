@@ -1,5 +1,5 @@
 import renderFormTemplate from '../templates/reviewForm.hbs';
-import {getActiveMarker, setActiveMarker} from './mapMarkers.js';
+import { getActiveMarker, setActiveMarker } from './mapMarkers.js';
 
 let activeInfoWindow;
 
@@ -29,11 +29,11 @@ function geocodeAddress(coords) {
 /**
  * Открывыет форму отзыва для отдельного объекта
  */
-function openInfoWindow({coords, clientX, clientY}) {
+function openInfoWindow({ coords, clientX, clientY }) {
 
     return geocodeAddress(coords).then(result => {
         const address = result;
-        const html = renderFormTemplate({address: address});
+        const html = renderFormTemplate({ address: address });
         const container = document.querySelector('.geoOtzyv');
         const infoWindow = document.createElement('div');
         const left = (clientX + 380 > window.innerWidth ? clientX - 380 : clientX);

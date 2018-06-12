@@ -1,8 +1,8 @@
-import {getActiveInfoWindow, openInfoWindow, closeInfoWindow} from './infoWindow.js';
-import {getClusterer} from './initMap.js';
+import { getActiveInfoWindow, openInfoWindow, closeInfoWindow } from './infoWindow.js';
+import { getClusterer } from './initMap.js';
 import myObj from './myObj.js';
-import {addComment} from './addComment.js';
-import {errorHandler} from './errorHandler.js';
+import { addComment } from './addComment.js';
+import { errorHandler } from './errorHandler.js';
 
 let activeMarker;
 
@@ -15,9 +15,17 @@ function formatDate(date) {
     let mm = date.getMonth() + 1;
     let yy = date.getFullYear() % 100;
 
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-    if (yy < 10) yy = '0' + yy;
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    if (yy < 10) {
+        yy = '0' + yy;
+    }
 
     return dd + '.' + mm + '.' + yy;
 }
@@ -51,7 +59,7 @@ function addNewMarker() {
         const key = JSON.parse(getActiveInfoWindow().dataset.coords);
         const address = getActiveInfoWindow().dataset.address;
         const date = formatDate(new Date());
-        const data = {name: name, place: place, review: review, date: date};
+        const data = { name: name, place: place, review: review, date: date };
         const myPlacemark = new ymaps.Placemark(key, {
             balloonContentPlace: place,
             balloonContentAddress: `<a href="#" class="balloon__address__link" data-key=${JSON.stringify(key)}>${address}</a>`,
@@ -103,7 +111,7 @@ function clickOnMarker(e) {
 
     activeMarker = placemark;
 
-    openInfoWindow({coords, clientX, clientY}).then((address) => {
+    openInfoWindow({ coords, clientX, clientY }).then((address) => {
         const data = myObj.getDataByKey(address);
 
         data.forEach(item => {

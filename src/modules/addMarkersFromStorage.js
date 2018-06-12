@@ -1,5 +1,5 @@
-import {getClusterer} from './initMap.js';
-import {clickOnMarker} from './mapMarkers.js';
+import { getClusterer } from './initMap.js';
+import { clickOnMarker } from './mapMarkers.js';
 import myObj from './myObj.js';
 
 /**

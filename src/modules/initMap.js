@@ -27,7 +27,7 @@ function initMap() {
         '<div class=balloon__date>{{ properties.balloonContentDate|raw }}</div>'
     );
 
-    myMap = new ymaps.Map("map", {
+    myMap = new ymaps.Map('map', {
         center: [55.760458, 37.663541],
         zoom: 18
     });
@@ -58,7 +58,7 @@ function initMap() {
         // clusterBalloonPagerVisible: false
     });
 
-    //Добавляем кластер на нашу карту
+    // Добавляем кластер на нашу карту
     myMap.geoObjects.add(myClusterer);
 }
 

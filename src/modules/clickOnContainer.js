@@ -1,9 +1,9 @@
-import {openInfoWindow, closeInfoWindow} from './infoWindow.js';
-import {addNewMarker} from './mapMarkers.js';
+import { openInfoWindow, closeInfoWindow } from './infoWindow.js';
+import { addNewMarker } from './mapMarkers.js';
 import myObj from './myObj.js';
-import {addComment} from './addComment.js';
-import {errorHandler} from './errorHandler.js';
-import {getClusterer} from './initMap.js';
+import { addComment } from './addComment.js';
+import { errorHandler } from './errorHandler.js';
+import { getClusterer } from './initMap.js';
 
 /**
  * Перехватывает клики по инфоокну
@@ -27,7 +27,7 @@ function clickOnContainer(e) {
         const clientY = e.clientY;
 
         e.preventDefault();
-        openInfoWindow({coords, clientX, clientY}).then(address => {
+        openInfoWindow({ coords, clientX, clientY }).then(address => {
             const data = myObj.getDataByKey(address);
 
             data.forEach(item => {
