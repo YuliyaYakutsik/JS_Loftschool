@@ -1,5 +1,7 @@
 import './styles/index.css';
 import myObj from './data.js';
+import renderReviewTemplate from './templates/review.hbs';
+import renderFormTemplate from './templates/reviewForm.hbs';
 
 let myMap;
 let myClusterer;
@@ -7,11 +9,11 @@ let activeInfoWindow;
 let activeMarker;
 let container = document.querySelector('.geoOtzyv');
 
-const reviewTemplate = document.querySelector('#review-template').textContent;
+/*const reviewTemplate = document.querySelector('#review-template').textContent;
 const renderReviewTemplate = Handlebars.compile(reviewTemplate);
 
 const formTemplate = document.querySelector('#markerInfo-template').textContent;
-const renderFormTemplate = Handlebars.compile(formTemplate);
+const renderFormTemplate = Handlebars.compile(formTemplate);*/
 
 /**
  * Карта загружена
