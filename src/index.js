@@ -1,5 +1,5 @@
 import './styles/index.css';
-import myObj from './data.js';
+import myObj from './modules/myObj.js';
 import renderReviewTemplate from './templates/review.hbs';
 import renderFormTemplate from './templates/reviewForm.hbs';
 
