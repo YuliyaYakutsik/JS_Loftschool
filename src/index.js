@@ -1,8 +1,5 @@
 import css from './styles/index.css';
-import {myClick} from './myClick.js';
-
-const template = document.querySelector('#user-template').textContent;
-const render = Handlebars.compile(template);
+import render from './templates/friends.hbs';
 
 const drugofilterContent = document.querySelector('.drugofilter__content');
 const drugofilterAuthorization = document.querySelector('.drugofilter__authorization');
@@ -21,9 +18,6 @@ const closeButton = document.querySelector('.drugofilter__header__close-button')
 let allFriends = {items: []};
 let groupFriends = {items: []};
 let currentDrag;
-let element = 'hello';
-
-myClick();
 
 if (localStorage.allFriends) {
 	let localAllFriends = JSON.parse(localStorage.allFriends);

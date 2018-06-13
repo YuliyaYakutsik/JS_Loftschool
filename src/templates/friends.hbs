@@ -1,0 +1,13 @@
+{{#each items}}
+<li class="drugofilter__info__item friend" id="{{id}}" draggable="true">
+    <div class="friend__preview">
+        <img src="{{photo_50}}" alt="avatar" class="friend__picture" draggable="false">
+    </div>
+    <div class="friend__name">
+        {{first_name}} {{last_name}}
+    </div>
+    <a href="#" class="friend__link" draggable="false">
+        <img class="friend__link__image" src="./src/images/add.png" alt="plus" draggable="false">
+    </a>
+</li>
+{{/each}}

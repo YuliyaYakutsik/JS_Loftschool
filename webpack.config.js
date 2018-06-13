@@ -32,7 +32,8 @@ module.exports = {
         new ExtractTextPlugin('css/index.css'),
         new HtmlPlugin({
             title: 'Drugofilter project',
-            template: 'index.html'
+            template: 'index.hbs',
+            filename: 'index.html'
         }),
         new CleanWebpackPlugin(['dist'])
     ]
