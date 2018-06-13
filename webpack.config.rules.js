@@ -10,7 +10,7 @@ module.exports = function() {
             loader: 'handlebars-loader'
         },
         {
-            test: /\.(jpe?g|png|gif|svg|)$/i,
+            test: /\.(jpe?g|png|gif|svg|)$/,
             loader: 'file-loader',
             options: {
                 name: 'images/[name].[ext]'
