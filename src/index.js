@@ -1,5 +1,8 @@
 import css from './styles/index.css';
-import render from './templates/friends.hbs';
+import {auth, callAPI } from './modules/authorization.js';
+import { renderFriends } from './modules/renderFriends.js';
+import { initFilters, filterLists } from './modules/initFilters.js';
+import { refreshFriendsLists } from './modules/refreshFriendsLists.js';
 
 const drugofilterContent = document.querySelector('.drugofilter__content');
 const drugofilterAuthorization = document.querySelector('.drugofilter__authorization');
@@ -52,9 +55,12 @@ drugofilterAuthorizationLink.addEventListener('click', e => {
 	        return callAPI('friends.get', { fields: 'photo_50' });
 	    })
 	    .then(friends => {
+	    	allFriends = {items: []};
+
 	    	for (let item of friends.items) {
 	    		allFriends.items.push(item);
 	    	}
+
 	    	renderFriends(friends, allResults);
 
 	    	drugofilterAuthorization.classList.add('drugofilter__authorization_hidden');
@@ -168,10 +174,15 @@ closeButton.addEventListener('click', e => {
 	drugofilterAuthorization.classList.remove('drugofilter__authorization_hidden');
 	drugofilterContent.classList.add('drugofilter__content_hidden');
 
+	allFriends.items = allFriends.items.filter(function(item) {
+		return false;
+	});
+
 	groupFriends.items = groupFriends.items.filter(function(item) {
 		return false;
 	});
 
+	renderFriends(allFriends, allResults);
 	renderFriends(groupFriends, groupResults);
 });
 
@@ -187,53 +198,6 @@ initFilters([
 		result: groupResults
 	}
 ]);
-
-function auth() {
-    return new Promise((resolve, reject) => {
-        VK.Auth.login(data => {
-            if (data.session) {
-                resolve();
-            } else {
-                reject(new Error('Не удалось авторизоваться'));
-            }
-        }, 2);
-    });
-}
-
-function callAPI(method, params) {
-    params.v = '5.76';
-
-    return new Promise((resolve, reject) => {
-        VK.api(method, params, (data) => {
-            if (data.error) {
-                reject(data.error);
-            } else {
-                resolve(data.response);
-            }
-        });
-    })
-}
-
-/**
- * Добавляет в DOM друзей
- * @param {*} friends - друзья
- * @param {*} results - куда добавить
- */
-function renderFriends(friends, results) {
-	results.innerHTML = '';
-	const html = render(friends);
-
-	results.innerHTML = html;
-}
-
-/**
- * Проверяет, содержит ли одно значение другое значение
- * @param {*} full - полное значение
- * @param {*} chunk - часть значения
- */
-function isMatching(full, chunk) {
-    return full.toUpperCase().indexOf(chunk.toUpperCase()) >= 0;
-}
 
 /**
  * Ищем зону в которой происходит D&D
@@ -263,48 +227,4 @@ function getElement(target) {
 	} while (element = element.parentElement);
 	
 	return false;
-}
-
-
-/**
- * Обновляет списки друзей: всех друзей и выбранных друзей
- * @param {*} sourceList - список, из которого переносится элемент-друг
- * @param {*} resultList - список, в который переносится элемент-друг
- * @param {*} sourceElement - элемент-друг, который переносится
- */
-function refreshFriendsLists(sourceList, resultList, sourceElement) {
-	let elementId = sourceElement.id;
-
-	sourceList.items = sourceList.items.filter(function(item) {
-		let fullId = `${item.id}`;
-
-		if (elementId === fullId) {
-			resultList.items.push(item);
-		} else {
-			return true;
-		}
-	});
-}
-
-function initFilters(params) {
-	params.forEach(item => {
-		item.target.addEventListener('input', () => {
-			filterLists(item.target, item.list, item.result);
-		})
-	})
-}
-
-function filterLists(input, list, result) {
-	let chunck = input.value;
-	let filteredFriends = {items: []};
-
-	for (let friend of list.items) {
-		let fullName = `${friend.first_name} ${friend.last_name}`;
-
-		if (isMatching(fullName, chunck)) {
-			filteredFriends.items.push(friend);
-        }
-	}
-
-    renderFriends(filteredFriends, result);
 }
